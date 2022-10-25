@@ -15,9 +15,11 @@ struct node
     struct node *link;
 };
 void push(struct node **,struct node **, char);
+void pop(struct node **,struct node **);
+void mostrar(struct node *);
 int main(int argc, char *argv[]){
     char op=' ',cass=' ',letras=' ';
-    int mayusculas=0, minusculas=0;
+    int mayusculas=0, minusculas=0, cantidad=0;
     srand(time(NULL));
     struct node *front = NULL;
 	struct node *back = NULL;
@@ -37,6 +39,7 @@ int main(int argc, char *argv[]){
         do{
 				scanf(" %c", &letras);
 				if(letras!='.' && ((letras>=65 && letras<=90)||(letras>=97 && letras<=122))){
+                    cantidad++;
 					push(&front, &back, letras);
 				}else{
 					if(letras=='.')
@@ -48,12 +51,16 @@ int main(int argc, char *argv[]){
             break;
         case 'b':
         case 'B':
+        cantidad=cantidad-1;
+        pop(&front, &back);
             break;
         case 'c':
         case 'C':
+        mostrar(front);
             break;
         case 'd':
         case 'D':
+        printf("La cantidad de letras que hay en el nodo es: %d.\n",cantidad);
             break;
         case 'e':
         case 'E':
@@ -82,4 +89,29 @@ void push(struct node **front, struct node **back, char c){
 		(*back)->link =temp;
 		*back=temp;
 	}
+}
+void pop(struct node **front, struct node **back){
+    struct node *temp = NULL;
+    if((*front==*back)&&(back==NULL)){
+        printf("Vacio.\n");
+        exit(1);
+    }
+    temp=*front;
+    *front = (*front)->link;
+    if(*back==temp){
+        *back==(*back)->link;
+    }
+    printf("Primer nodo borrado.\n");
+    free(temp);
+}
+void mostrar(struct node *front){
+    struct node *temp = NULL;
+    temp=front;
+    printf("Los valores ingresados son;\n");
+    while (temp!=NULL)
+    {
+        printf("%d\t",temp->data);
+        temp=temp->link;
+    }
+    printf("\n");
 }
